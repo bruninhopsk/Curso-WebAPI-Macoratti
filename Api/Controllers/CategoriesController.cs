@@ -20,6 +20,15 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        public async Task<ActionResult> GetProducts()
+        {
+            var categoriesWithProducts = Context.Category.AsNoTracking().Include(x => x.Products);
+
+            return Ok(categoriesWithProducts);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
         public async Task<ActionResult> GetAll()
         {
             var response = Context.Category.ToList();

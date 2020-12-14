@@ -60,3 +60,7 @@ C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Doma
 C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Infrastructure.dll
 C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Domain.pdb
 C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Infrastructure.pdb
+C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\bruni\Desktop\Projects\Curso-WebAPI-Macoratti\Api\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
