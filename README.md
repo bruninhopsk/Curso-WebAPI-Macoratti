@@ -37,3 +37,6 @@
     [MaxLength] - Determina o tamanho máximo do campo da tabela(EF CORE)
 
     OBS: Podemos criar nossos próprios Data Annotations, criando uma classe onde a mesma deve ser herdada da classe ValidationAttribute e sobrecrever o método IsValid
+
+ # Middleware
+ 	De uma forma simples, é uma camada no meio de duas aplicações, ou seja, uma camada que ajuda duas aplicações, partes, sistemas, a se comunicarem. Um middlerare é um "bloco" onde faz um processamento de dados e devolve um response, porem, em alguns casos, um middleware pode se comunicar com outros middlewares.
