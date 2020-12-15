@@ -4,6 +4,7 @@ using Domain;
 using Infrastructure.EntityFramework.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Api.Controllers
 {
@@ -16,6 +17,15 @@ namespace Api.Controllers
         public CategoriesController(AppDataContext context)
         {
             Context = context;
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public string GetAuthor([FromServices] IConfiguration configuration)
+        {
+            var author = configuration["author"];
+
+            return $"Author: {author}";
         }
 
         [HttpGet]
