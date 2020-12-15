@@ -54,4 +54,10 @@
 	Os filtros são atributos anexados ás classes ou métodos dos controlacores que injetam lógica extra ao processamento da requisição e permitem a implementação de funcionalidades relacionadas a (autorização, exception, log e cache).
    	-  	Eles permitem executar um código personalizado antes ou depois de executar um método action.
    	- 	Permitem também realizar tarefas repetitivas comuns a métodos Actions e são chamados em certos estágios do pipeline.	
-   
+
+# Repository Pattern
+	O padrão repositório, faz a mediação entre o domínio e as camadas de mapeamento de dados, agindo como uma coleção de objetos de dominio em memoria. "Martin Fowler". 
+	Vantagens:
+	-	Minimiza a lógica de consultas na aplicação evitando consultas espalhadas pelo código(encapsula a logica das consultas no repositório)
+	-	Desacopla a aplicação dos frameworks de persistência como exemplo o EF Core.
+	-	Facilita a realização de testes unitários.  
