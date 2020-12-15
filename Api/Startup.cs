@@ -1,8 +1,7 @@
 using Api.Extensions;
-using Infrastructure.EntityFramework.Context;
+using Api.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +21,7 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ApiLoggingFilter>();
             services.AddRepositories(Configuration);
             services.AddControllers()
                     .AddNewtonsoftJson(options =>

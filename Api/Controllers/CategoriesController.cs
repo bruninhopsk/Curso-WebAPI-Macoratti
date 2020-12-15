@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Filters;
 using Domain;
 using Infrastructure.EntityFramework.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ApiLoggingFilter))]
         [Route("[action]")]
         public string GetAuthor([FromServices] IConfiguration configuration)
         {
