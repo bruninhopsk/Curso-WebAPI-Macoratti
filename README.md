@@ -2,7 +2,7 @@
 
 # Requisitos para rodar projeto
 	- 	SQL Server (Alterar string de conexão para a configuração do seu SQl Server)
-    - 	Abrir terminal na camada de infrastrucure e rodar o comando dotnet ef database update(Aplicará os dados da migration no banco)
+    - 	Abrir terminal na camada de infrastructure e rodar o comando dotnet ef database update(Aplicará os dados da migration no banco)
 
 # Padrões de roteamento
    	[Route("api/[controller]")] - api/products
