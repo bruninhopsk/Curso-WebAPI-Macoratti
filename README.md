@@ -61,3 +61,6 @@
 	-	Minimiza a lógica de consultas na aplicação evitando consultas espalhadas pelo código(encapsula a logica das consultas no repositório)
 	-	Desacopla a aplicação dos frameworks de persistência como exemplo o EF Core.
 	-	Facilita a realização de testes unitários.  
+
+# Unit of Work
+	Unit Of Work ou Unidade de Trabalho é um padrão de projeto onde de acordo com Martin Fowler, o padrão de unidade de trabalho “mantém uma lista de objetos afetados por uma transação, coordena a escrita de mudanças e trata possíveis problemas de concorrência".

@@ -20,7 +20,6 @@ namespace Infrastructure.Repositories
         public void Add(T entity)
         {
             Context.Set<T>().Add(entity);
-            this.SaveChange();
         }
 
         public List<T> GetAll()
@@ -38,18 +37,11 @@ namespace Infrastructure.Repositories
         public void Remove(T entity)
         {
             Context.Set<T>().Remove(entity);
-            this.SaveChange();
         }
 
         public void Update(T entity)
         {
             Context.Set<T>().Update(entity);
-            this.SaveChange();
-        }
-
-        public void SaveChange()
-        {
-            Context.SaveChanges();
         }
     }
 }
