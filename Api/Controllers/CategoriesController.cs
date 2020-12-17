@@ -1,10 +1,9 @@
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using Api.Filters;
 using Domain;
+using Domain.Repositories;
 using Infrastructure.EntityFramework.Context;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Api.Controllers
@@ -14,10 +13,11 @@ namespace Api.Controllers
     [Route("[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private AppDataContext Context { get; }
-        public CategoriesController(AppDataContext context)
+        private IUnitOfWork UnitOfWork { get; }
+
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
-            Context = context;
+            UnitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -32,83 +32,130 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult> GetProducts()
+        public ActionResult GetProducts()
         {
-            var categoriesWithProducts = Context.Category.AsNoTracking().Include(x => x.Products);
+            try
+            {
+                var categories = UnitOfWork.CategoryRepository.GetProducts();
 
-            return Ok(categoriesWithProducts);
+                if (categories.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return Ok(categories);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult> GetAll()
+        public ActionResult GetAll()
         {
-            var response = Context.Category.ToList();
-
-            if (response == null)
+            try
             {
-                return NoContent();
-            }
+                var categories = UnitOfWork.CategoryRepository.GetAll();
 
-            return Ok(response);
+                if (categories == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(categories);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult> GetById([FromServices] AppDataContext Context, [FromQuery] int categoryId)
+        public ActionResult GetById([FromQuery] int categoryId)
         {
-            var response = Context.Category.FirstOrDefault(x => x.CategoryId == categoryId);
-
-            if (response == null)
+            try
             {
-                return NoContent();
-            }
+                var category = UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == categoryId);
 
-            return Ok(response);
+                if (category == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> Create([FromBody] Category category)
+        public ActionResult Create([FromBody] Category category)
         {
-            Context.Add(category);
-            Context.SaveChanges();
+            try
+            {
+                UnitOfWork.CategoryRepository.Add(category);
+                UnitOfWork.Commit();
 
-            return CreatedAtRoute(nameof(GetById), new { Id = category.CategoryId }, category);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpPut]
         [Route("[action]")]
-        public async Task<ActionResult> Update([FromBody] Category category)
+        public ActionResult Update([FromBody] Category category)
         {
-            var productFound = Context.Category.AsNoTracking().FirstOrDefault(x => x.CategoryId == category.CategoryId);
-
-            if (productFound == null)
+            try
             {
-                return NoContent();
+                var categoryFound = UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == category.CategoryId);
+
+                if (categoryFound == null)
+                {
+                    return NoContent();
+                }
+
+                UnitOfWork.CategoryRepository.Update(category);
+                UnitOfWork.Commit();
+
+                return Ok();
             }
-
-            Context.Update(category);
-            Context.SaveChanges();
-
-            return Ok("Category has been updated");
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpDelete]
         [Route("[action]")]
-        public async Task<ActionResult> Delete([FromQuery] int categoryId)
+        public ActionResult Delete([FromQuery] int categoryId)
         {
-            var productFound = Context.Category.AsNoTracking().FirstOrDefault(x => x.CategoryId == categoryId);
-
-            if (productFound == null)
+            try
             {
-                return NoContent();
+                var categoryFound = UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == categoryId);
+
+                if (categoryFound == null)
+                {
+                    return NoContent();
+                }
+
+                UnitOfWork.CategoryRepository.Remove(categoryFound);
+                UnitOfWork.Commit();
+
+                return Ok();
             }
-
-            Context.Category.Remove(productFound);
-            Context.SaveChanges();
-
-            return Ok("Category has been deleted");
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
     }
 }
