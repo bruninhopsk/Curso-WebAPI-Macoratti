@@ -1,11 +1,9 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Api.Filters;
 using Domain;
-using Infrastructure.EntityFramework.Context;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Api.Controllers
 {
@@ -14,10 +12,11 @@ namespace Api.Controllers
     [Route("[controller]")]
     public class ProductsController : ControllerBase
     {
-        private AppDataContext Context { get; }
-        public ProductsController(AppDataContext context)
+        private IUnitOfWork UnitOfWork { get; }
+
+        public ProductsController(IUnitOfWork unitOfWork)
         {
-            Context = context;
+            UnitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -32,74 +31,109 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult> GetAll()
+        public ActionResult GetAll()
         {
-            var response = Context.Product.ToList();
-
-            if (response == null)
+            try
             {
-                return NoContent();
-            }
+                var products = UnitOfWork.ProductRepository.GetAll();
 
-            return Ok(response);
+                if (products.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return Ok(products);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error unexpected occurred.");
+            }
         }
 
         [HttpGet(Name = "getById")]
         [Route("[action]")]
-        public async Task<ActionResult> GetById([FromServices] AppDataContext Context, [FromQuery] int productId)
+        public ActionResult GetById([FromQuery] int productId)
         {
-            var response = Context.Product.FirstOrDefault(x => x.ProductId == productId);
-
-            if (response == null)
+            try
             {
-                return NoContent();
-            }
+                var product = UnitOfWork.ProductRepository.GetById(x => x.ProductId == productId);
 
-            return Ok(response);
+                if (product == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(product);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error unexpected occurred.");
+            }
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> Create([FromBody] Product product)
+        public ActionResult Create([FromBody] Product product)
         {
-            Context.Add(product);
-            Context.SaveChanges();
+            try
+            {
+                UnitOfWork.ProductRepository.Add(product);
+                UnitOfWork.Commit();
 
-            return CreatedAtRoute(nameof(GetById), new { Id = product.ProductId }, product);
+                return Ok(product);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error unexpected occurred.");
+            }
         }
 
         [HttpPut]
         [Route("[action]")]
-        public async Task<ActionResult> Update([FromBody] Product product)
+        public ActionResult Update([FromBody] Product product)
         {
-            var productFound = Context.Product.AsNoTracking().FirstOrDefault(x => x.ProductId == product.ProductId);
-
-            if (productFound == null)
+            try
             {
-                return NoContent();
+                var productFound = UnitOfWork.ProductRepository.GetById(x => x.ProductId == product.ProductId);
+
+                if (productFound == null)
+                {
+                    return NoContent();
+                }
+
+                UnitOfWork.ProductRepository.Update(product);
+                UnitOfWork.Commit();
+
+                return Ok();
             }
-
-            Context.Update(product);
-            Context.SaveChanges();
-
-            return Ok("Product has been updated");
+            catch (Exception)
+            {
+                return StatusCode(500, "An error unexpected occurred.");
+            }
         }
 
         [HttpDelete]
         [Route("[action]")]
-        public async Task<ActionResult> Delete([FromQuery] int productId)
+        public ActionResult Delete([FromQuery] int productId)
         {
-            var productFound = Context.Product.AsNoTracking().FirstOrDefault(x => x.ProductId == productId);
-
-            if (productFound == null)
+            try
             {
-                return NoContent();
+                var productFound = UnitOfWork.ProductRepository.GetById(x => x.ProductId == productId);
+
+                if (productFound == null)
+                {
+                    return NoContent();
+                }
+
+                UnitOfWork.ProductRepository.Remove(productFound);
+                UnitOfWork.Commit();
+
+                return Ok();
             }
-
-            Context.Product.Remove(productFound);
-            Context.SaveChanges();
-
-            return Ok("Product has been deleted");
+            catch (Exception)
+            {
+                return StatusCode(500, "An error unexpected occurred.");
+            }
         }
     }
 }
