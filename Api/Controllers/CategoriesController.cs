@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Api.Filters;
+using AutoMapper;
 using Domain;
+using Domain.DTOs;
 using Domain.Repositories;
 using Infrastructure.EntityFramework.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +17,12 @@ namespace Api.Controllers
     public class CategoriesController : ControllerBase
     {
         private IUnitOfWork UnitOfWork { get; }
+        private IMapper Mapper { get; }
 
-        public CategoriesController(IUnitOfWork unitOfWork)
+        public CategoriesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             UnitOfWork = unitOfWork;
+            Mapper = mapper;
         }
 
         [HttpGet]
@@ -43,7 +48,9 @@ namespace Api.Controllers
                     return NoContent();
                 }
 
-                return Ok(categories);
+                var categoriesDto = Mapper.Map<List<CategoryDTO>>(categories);
+
+                return Ok(categoriesDto);
             }
             catch (Exception)
             {
@@ -64,7 +71,9 @@ namespace Api.Controllers
                     return NoContent();
                 }
 
-                return Ok(categories);
+                var categoriesDto = Mapper.Map<List<CategoryDTO>>(categories);
+
+                return Ok(categoriesDto);
             }
             catch (Exception)
             {
@@ -85,7 +94,9 @@ namespace Api.Controllers
                     return NoContent();
                 }
 
-                return Ok(category);
+                var categoryDTO = Mapper.Map<CategoryDTO>(category);
+
+                return Ok(categoryDTO);
             }
             catch (Exception)
             {
@@ -95,10 +106,12 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult Create([FromBody] Category category)
+        public ActionResult Create([FromBody] CategoryDTO categoryDTO)
         {
             try
             {
+                var category = Mapper.Map<Category>(categoryDTO);
+
                 UnitOfWork.CategoryRepository.Add(category);
                 UnitOfWork.Commit();
 
@@ -112,13 +125,15 @@ namespace Api.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        public ActionResult Update([FromBody] Category category)
+        public ActionResult Update([FromBody] CategoryDTO categoryDTO)
         {
             try
             {
+                var category = Mapper.Map<Category>(categoryDTO);
+
                 var categoryFound = UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == category.CategoryId);
 
-                if (categoryFound == null)
+                if (categoryFound is null)
                 {
                     return NoContent();
                 }
