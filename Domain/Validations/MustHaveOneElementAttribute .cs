@@ -6,7 +6,6 @@ namespace Domain.Validations
 {
     public class MustHaveOneElementAttribute : ValidationAttribute
     {
-
         public override bool IsValid(object value)
         {
             var list = value as IList;

@@ -64,3 +64,8 @@
 
 # Unit of Work
 	Unit Of Work ou Unidade de Trabalho é um padrão de projeto onde de acordo com Martin Fowler, o padrão de unidade de trabalho “mantém uma lista de objetos afetados por uma transação, coordena a escrita de mudanças e trata possíveis problemas de concorrência".
+
+# DTO(Data Transfer Objects)
+	É um padrão de projeto onde tem como objetivo transportar dados entre camadas de uma aplicação. Como boa prática, não é recomendado que nossos controllers conhecam/acessem nossas classes de dominio, com base nisso, usamos os DTO's para expor somente os dados necessários, restritas a um conjunto de dados.
+
+# AutoMapper
