@@ -70,3 +70,7 @@
 
 # AutoMapper
 	O AutoMapper é uma biblioteca simples construída para resolver um problema aparentemente complexo, que é livrar-se de um código que mapeou um objeto para outro. Um exemplo muito usado é com o DTO. Em muitos casos, não queremos devolver para o usuário entidade de dominio, e com isso, usamos o automapper para mapear o objeto de dominio para um DTO(DataTransferObject) ou vice-versa.
+
+# Paginação na API REST
+	A paginação refere-se em obter resultados parcias na consulta de uma API. Ela permite que as informações sejam divididas entre páginas tendo como objetivo evitar a apresentação de uma única pagina com grande quantidade de dados tornando a aplicação mais rapida e eficente.
+	
