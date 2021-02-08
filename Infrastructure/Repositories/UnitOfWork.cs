@@ -35,10 +35,5 @@ namespace Infrastructure.Repositories
         {
             Context.SaveChanges();
         }
-
-        public void Dispose()
-        {
-            Context.Dispose();
-        }
     }
 }
