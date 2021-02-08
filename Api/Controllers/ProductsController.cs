@@ -2,6 +2,7 @@ using Api.Filters;
 using AutoMapper;
 using Domain;
 using Domain.DTOs;
+using Domain.Models;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -36,11 +37,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetAll()
+        public ActionResult GetAll([FromQuery] ProductParameters parameters)
         {
             try
             {
-                var products = UnitOfWork.ProductRepository.GetAll();
+                var products = UnitOfWork.ProductRepository.GetProducts(parameters);
 
                 if (products.Count == 0)
                 {
