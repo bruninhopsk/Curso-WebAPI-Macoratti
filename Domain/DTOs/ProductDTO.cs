@@ -15,9 +15,6 @@ namespace Domain.DTOs
 
         [Range(1, double.MaxValue, ErrorMessage = "This field is required!")]
         public decimal Price { get; set; }
-
-        [Required(ErrorMessage = "This field is required!")]
-        public DateTime DateRegister { get; set; }
         public int CategoryId { get; set; }
     }
 }

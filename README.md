@@ -69,3 +69,4 @@
 	É um padrão de projeto onde tem como objetivo transportar dados entre camadas de uma aplicação. Como boa prática, não é recomendado que nossos controllers conhecam/acessem nossas classes de dominio, com base nisso, usamos os DTO's para expor somente os dados necessários, restritas a um conjunto de dados.
 
 # AutoMapper
+	O AutoMapper é uma biblioteca simples construída para resolver um problema aparentemente complexo, que é livrar-se de um código que mapeou um objeto para outro. Um exemplo muito usado é com o DTO. Em muitos casos, não queremos devolver para o usuário entidade de dominio, e com isso, usamos o automapper para mapear o objeto de dominio para um DTO(DataTransferObject) ou vice-versa.
