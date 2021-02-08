@@ -1,9 +1,12 @@
 using Api.Filters;
+using AutoMapper;
 using Domain;
+using Domain.DTOs;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 
 namespace Api.Controllers
 {
@@ -13,10 +16,12 @@ namespace Api.Controllers
     public class ProductsController : ControllerBase
     {
         private IUnitOfWork UnitOfWork { get; }
+        private IMapper Mapper { get; }
 
-        public ProductsController(IUnitOfWork unitOfWork)
+        public ProductsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             UnitOfWork = unitOfWork;
+            Mapper = mapper;
         }
 
         [HttpGet]
@@ -42,7 +47,9 @@ namespace Api.Controllers
                     return NoContent();
                 }
 
-                return Ok(products);
+                var productsDto = Mapper.Map<List<ProductDTO>>(products);
+
+                return Ok(productsDto);
             }
             catch (Exception)
             {
@@ -50,7 +57,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet(Name = "getById")]
+        [HttpGet]
         [Route("[action]")]
         public ActionResult GetById([FromQuery] int productId)
         {
@@ -63,7 +70,9 @@ namespace Api.Controllers
                     return NoContent();
                 }
 
-                return Ok(product);
+                var productDto = Mapper.Map<ProductDTO>(product);
+
+                return Ok(productDto);
             }
             catch (Exception)
             {
@@ -73,10 +82,12 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult Create([FromBody] Product product)
+        public ActionResult Create([FromBody] ProductDTO productDto)
         {
             try
             {
+                var product = Mapper.Map<Product>(productDto);
+
                 UnitOfWork.ProductRepository.Add(product);
                 UnitOfWork.Commit();
 
@@ -90,21 +101,24 @@ namespace Api.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        public ActionResult Update([FromBody] Product product)
+        public ActionResult Update([FromBody] ProductDTO productDto)
         {
             try
             {
-                var productFound = UnitOfWork.ProductRepository.GetById(x => x.ProductId == product.ProductId);
+                var productFound = UnitOfWork.ProductRepository.GetById(x => x.ProductId == productDto.ProductId);
 
                 if (productFound == null)
                 {
                     return NoContent();
                 }
 
+                var product = Mapper.Map<Product>(productDto);
+
                 UnitOfWork.ProductRepository.Update(product);
                 UnitOfWork.Commit();
 
                 return Ok();
+
             }
             catch (Exception)
             {
