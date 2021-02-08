@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain;
 using Domain.Models;
+using Domain.Pagination;
 using Domain.Repositories;
 using Infrastructure.EntityFramework.Context;
 
@@ -21,14 +22,11 @@ namespace Infrastructure.Repositories
             return GetAll().OrderBy(x => x.Price).ToList();
         }
 
-        public List<Product> GetProducts(ProductParameters parameters)
+        public PagedList<Product> GetProducts(ProductParameters parameters)
         {
-            var query = GetAll()
-                                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                                .Take(parameters.PageSize)
-                                .ToList();
+            var query = GetAll().AsQueryable();
 
-            return query;
+            return PagedList<Product>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

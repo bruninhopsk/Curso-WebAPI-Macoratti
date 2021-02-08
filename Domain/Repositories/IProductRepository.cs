@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using Domain.Models;
+using Domain.Pagination;
 
 namespace Domain.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
         List<Product> GetProductsByPrice();
-        List<Product> GetProducts(ProductParameters parameters);
+        PagedList<Product> GetProducts(ProductParameters parameters);
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -43,10 +44,19 @@ namespace Api.Controllers
             {
                 var products = UnitOfWork.ProductRepository.GetProducts(parameters);
 
-                if (products.Count == 0)
+                if (products.Count == 0) return NoContent();
+
+                var metaData = new
                 {
-                    return NoContent();
-                }
+                    products.CurrentPage,
+                    products.PageSize,
+                    products.TotalPages,
+                    products.TotalCount,
+                    products.HasNext,
+                    products.HasPrevious,
+                };
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
                 var productsDto = Mapper.Map<List<ProductDTO>>(products);
 
