@@ -8,6 +8,6 @@ namespace Domain.Repositories
     public interface IProductRepository : IGenericRepository<Product>
     {
         Task<List<Product>> GetProductsByPrice();
-        PagedList<Product> GetProducts(ProductsParameters parameters);
+        Task<PagedList<Product>> GetProducts(ProductsParameters parameters);
     }
 }

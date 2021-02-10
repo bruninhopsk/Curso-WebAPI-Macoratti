@@ -8,6 +8,6 @@ namespace Domain.Repositories
     public interface ICategoryRepository : IGenericRepository<Category>
     {
         Task<List<Category>> GetCategoriesWithProducts();
-        PagedList<Category> GetCategories(CategoriesParameters parameters);
+        Task<PagedList<Category>> GetCategories(CategoriesParameters parameters);
     }
 }

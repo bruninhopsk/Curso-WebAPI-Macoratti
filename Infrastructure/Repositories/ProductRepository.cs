@@ -24,11 +24,11 @@ namespace Infrastructure.Repositories
             return await GetAll().OrderBy(x => x.Price).ToListAsync();
         }
 
-        public PagedList<Product> GetProducts(ProductsParameters parameters)
+        public Task<PagedList<Product>> GetProducts(ProductsParameters parameters)
         {
             var query = GetAll().AsQueryable();
 
-            return PagedList<Product>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
+            return Task.FromResult(PagedList<Product>.ToPagedList(query, parameters.PageNumber, parameters.PageSize));
         }
     }
 }

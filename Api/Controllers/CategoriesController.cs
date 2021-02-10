@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Api.Filters;
 using AutoMapper;
 using Domain;
@@ -38,11 +39,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetProducts()
+        public async Task<ActionResult> GetProducts()
         {
             try
             {
-                var categories = UnitOfWork.CategoryRepository.GetProducts();
+                var categories = await UnitOfWork.CategoryRepository.GetCategoriesWithProducts();
 
                 if (categories.Count == 0)
                 {
@@ -61,11 +62,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetAll([FromQuery] CategoriesParameters parameters)
+        public async Task<ActionResult> GetAll([FromQuery] CategoriesParameters parameters)
         {
             try
             {
-                var categories = UnitOfWork.CategoryRepository.GetCategories(parameters);
+                var categories = await UnitOfWork.CategoryRepository.GetCategories(parameters);
 
                 if (categories == null)
                 {
@@ -96,11 +97,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetById([FromQuery] int categoryId)
+        public async Task<ActionResult> GetById([FromQuery] int categoryId)
         {
             try
             {
-                var category = UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == categoryId);
+                var category = await UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == categoryId);
 
                 if (category == null)
                 {
@@ -119,14 +120,14 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult Create([FromBody] CategoryDTO categoryDTO)
+        public async Task<ActionResult> Create([FromBody] CategoryDTO categoryDTO)
         {
             try
             {
                 var category = Mapper.Map<Category>(categoryDTO);
 
                 UnitOfWork.CategoryRepository.Add(category);
-                UnitOfWork.Commit();
+                await UnitOfWork.Commit();
 
                 return Ok(category);
             }
@@ -138,7 +139,7 @@ namespace Api.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        public ActionResult Update([FromBody] CategoryDTO categoryDTO)
+        public async Task<ActionResult> Update([FromBody] CategoryDTO categoryDTO)
         {
             try
             {
@@ -152,7 +153,7 @@ namespace Api.Controllers
                 }
 
                 UnitOfWork.CategoryRepository.Update(category);
-                UnitOfWork.Commit();
+                await UnitOfWork.Commit();
 
                 return Ok();
             }
@@ -164,11 +165,11 @@ namespace Api.Controllers
 
         [HttpDelete]
         [Route("[action]")]
-        public ActionResult Delete([FromQuery] int categoryId)
+        public async Task<ActionResult> Delete([FromQuery] int categoryId)
         {
             try
             {
-                var categoryFound = UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == categoryId);
+                var categoryFound = await UnitOfWork.CategoryRepository.GetById(x => x.CategoryId == categoryId);
 
                 if (categoryFound == null)
                 {
@@ -176,7 +177,7 @@ namespace Api.Controllers
                 }
 
                 UnitOfWork.CategoryRepository.Remove(categoryFound);
-                UnitOfWork.Commit();
+                await UnitOfWork.Commit();
 
                 return Ok();
             }

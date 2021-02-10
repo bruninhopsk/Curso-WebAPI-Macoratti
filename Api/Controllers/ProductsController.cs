@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -38,13 +39,16 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetAll([FromQuery] ProductsParameters parameters)
+        public async Task<ActionResult> GetAll([FromQuery] ProductsParameters parameters)
         {
             try
             {
-                var products = UnitOfWork.ProductRepository.GetProducts(parameters);
+                var products = await UnitOfWork.ProductRepository.GetProducts(parameters);
 
-                if (products.Count == 0) return NoContent();
+                if (products.Count == 0)
+                {
+                    return NoContent();
+                }
 
                 var metaData = new
                 {
@@ -70,11 +74,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetById([FromQuery] int productId)
+        public async Task<ActionResult> GetById([FromQuery] int productId)
         {
             try
             {
-                var product = UnitOfWork.ProductRepository.GetById(x => x.ProductId == productId);
+                var product = await UnitOfWork.ProductRepository.GetById(x => x.ProductId == productId);
 
                 if (product == null)
                 {
@@ -93,14 +97,14 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult Create([FromBody] ProductDTO productDto)
+        public async Task<ActionResult> Create([FromBody] ProductDTO productDto)
         {
             try
             {
                 var product = Mapper.Map<Product>(productDto);
 
                 UnitOfWork.ProductRepository.Add(product);
-                UnitOfWork.Commit();
+                await UnitOfWork.Commit();
 
                 return Ok(product);
             }
@@ -112,7 +116,7 @@ namespace Api.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        public ActionResult Update([FromBody] ProductDTO productDto)
+        public async Task<ActionResult> Update([FromBody] ProductDTO productDto)
         {
             try
             {
@@ -126,7 +130,7 @@ namespace Api.Controllers
                 var product = Mapper.Map<Product>(productDto);
 
                 UnitOfWork.ProductRepository.Update(product);
-                UnitOfWork.Commit();
+                await UnitOfWork.Commit();
 
                 return Ok();
 
@@ -139,11 +143,11 @@ namespace Api.Controllers
 
         [HttpDelete]
         [Route("[action]")]
-        public ActionResult Delete([FromQuery] int productId)
+        public async Task<ActionResult> Delete([FromQuery] int productId)
         {
             try
             {
-                var productFound = UnitOfWork.ProductRepository.GetById(x => x.ProductId == productId);
+                var productFound = await UnitOfWork.ProductRepository.GetById(x => x.ProductId == productId);
 
                 if (productFound == null)
                 {
@@ -151,7 +155,7 @@ namespace Api.Controllers
                 }
 
                 UnitOfWork.ProductRepository.Remove(productFound);
-                UnitOfWork.Commit();
+                await UnitOfWork.Commit();
 
                 return Ok();
             }
