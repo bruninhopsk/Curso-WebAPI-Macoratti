@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Domain.Repositories;
 using Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
@@ -22,16 +23,14 @@ namespace Infrastructure.Repositories
             Context.Set<T>().Add(entity);
         }
 
-        public List<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return Context.Set<T>().AsNoTracking().ToList();
+            return Context.Set<T>().AsNoTracking();
         }
 
-        public T GetById(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetById(Expression<Func<T, bool>> predicate)
         {
-            var entity = Context.Set<T>().AsNoTracking().FirstOrDefault(predicate);
-
-            return entity;
+            return await Context.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
         public void Remove(T entity)

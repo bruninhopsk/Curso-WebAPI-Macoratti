@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain;
 using Domain.Models;
 using Domain.Pagination;
@@ -18,9 +19,9 @@ namespace Infrastructure.Repositories
             Context = context;
         }
 
-        public List<Category> GetProducts()
+        public async Task<List<Category>> GetCategoriesWithProducts()
         {
-            return Context.Category.AsNoTracking().Include(x => x.Products).ToList();
+            return await Context.Category.AsNoTracking().Include(x => x.Products).ToListAsync();
         }
 
         public PagedList<Category> GetCategories(CategoriesParameters parameters)

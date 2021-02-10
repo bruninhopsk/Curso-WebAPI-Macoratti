@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain;
 using Domain.Models;
 using Domain.Pagination;
 using Domain.Repositories;
 using Infrastructure.EntityFramework.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -17,9 +19,9 @@ namespace Infrastructure.Repositories
             Context = context;
         }
 
-        public List<Product> GetProductsByPrice()
+        public async Task<List<Product>> GetProductsByPrice()
         {
-            return GetAll().OrderBy(x => x.Price).ToList();
+            return await GetAll().OrderBy(x => x.Price).ToListAsync();
         }
 
         public PagedList<Product> GetProducts(ProductsParameters parameters)

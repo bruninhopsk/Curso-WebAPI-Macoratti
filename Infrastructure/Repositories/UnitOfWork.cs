@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Domain.Repositories;
 using Infrastructure.EntityFramework.Context;
 
@@ -31,9 +32,9 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public void Commit()
+        public async Task Commit()
         {
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
     }
 }
