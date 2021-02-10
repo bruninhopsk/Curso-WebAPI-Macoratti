@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
             return GetAll().OrderBy(x => x.Price).ToList();
         }
 
-        public PagedList<Product> GetProducts(ProductParameters parameters)
+        public PagedList<Product> GetProducts(ProductsParameters parameters)
         {
             var query = GetAll().AsQueryable();
 

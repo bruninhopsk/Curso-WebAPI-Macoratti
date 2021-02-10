@@ -1,6 +1,6 @@
 namespace Domain.Models
 {
-    public class ProductParameters
+    public abstract class PaginationParameters
     {
         const int MAXPAGESIZE = 50;
         private int DefaultPageSize = 10;

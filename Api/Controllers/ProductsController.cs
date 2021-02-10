@@ -38,7 +38,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetAll([FromQuery] ProductParameters parameters)
+        public ActionResult GetAll([FromQuery] ProductsParameters parameters)
         {
             try
             {

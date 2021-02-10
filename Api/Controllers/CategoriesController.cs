@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Api.Filters;
 using AutoMapper;
 using Domain;
 using Domain.DTOs;
+using Domain.Models;
 using Domain.Repositories;
-using Infrastructure.EntityFramework.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -60,16 +61,28 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public ActionResult GetAll()
+        public ActionResult GetAll([FromQuery] CategoriesParameters parameters)
         {
             try
             {
-                var categories = UnitOfWork.CategoryRepository.GetAll();
+                var categories = UnitOfWork.CategoryRepository.GetCategories(parameters);
 
                 if (categories == null)
                 {
                     return NoContent();
                 }
+
+                var metaData = new
+                {
+                    categories.CurrentPage,
+                    categories.PageSize,
+                    categories.TotalCount,
+                    categories.TotalPages,
+                    categories.HasNext,
+                    categories.HasPrevious,
+                };
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
                 var categoriesDto = Mapper.Map<List<CategoryDTO>>(categories);
 

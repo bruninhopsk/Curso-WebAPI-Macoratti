@@ -7,6 +7,6 @@ namespace Domain.Repositories
     public interface IProductRepository : IGenericRepository<Product>
     {
         List<Product> GetProductsByPrice();
-        PagedList<Product> GetProducts(ProductParameters parameters);
+        PagedList<Product> GetProducts(ProductsParameters parameters);
     }
 }
