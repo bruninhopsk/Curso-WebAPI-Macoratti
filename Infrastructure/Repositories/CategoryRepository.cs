@@ -24,11 +24,11 @@ namespace Infrastructure.Repositories
             return await Context.Category.AsNoTracking().Include(x => x.Products).ToListAsync();
         }
 
-        public Task<PagedList<Category>> GetCategories(CategoriesParameters parameters)
+        public async Task<PagedList<Category>> GetCategories(CategoriesParameters parameters)
         {
             var query = GetAll().AsQueryable();
 
-            return Task.FromResult(PagedList<Category>.ToPagedList(query, parameters.PageNumber, parameters.PageSize));
+            return await PagedList<Category>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

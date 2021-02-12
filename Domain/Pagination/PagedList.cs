@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Domain.Pagination
 {
@@ -23,12 +24,12 @@ namespace Domain.Pagination
             AddRange(items);
         }
 
-        public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
+        public static Task<PagedList<T>> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
         {
             var count = source.Count();
             var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
-            return new PagedList<T>(items, count, pageNumber, pageSize);
+            return Task.FromResult(new PagedList<T>(items, count, pageNumber, pageSize));
         }
     }
 }
