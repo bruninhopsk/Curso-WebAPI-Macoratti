@@ -72,5 +72,19 @@
 	O AutoMapper é uma biblioteca simples construída para resolver um problema aparentemente complexo, que é livrar-se de um código que mapeou um objeto para outro. Um exemplo muito usado é com o DTO. Em muitos casos, não queremos devolver para o usuário entidade de dominio, e com isso, usamos o automapper para mapear o objeto de dominio para um DTO(DataTransferObject) ou vice-versa.
 
 # Paginação na API REST
-	A paginação refere-se em obter resultados parcias na consulta de uma API. Ela permite que as informações sejam divididas entre páginas tendo como objetivo evitar a apresentação de uma única pagina com grande quantidade de dados tornando a aplicação mais rapida e eficente.
+	A paginação refere-se em obter resultados parcias na consulta de uma API. Ela permite que as informações sejam divididas entre páginas tendo como objetivo evitar a apresentação de uma única pagina com grande quantidade de dados tornando a aplicação mais rapida e eficente. 
+
+# Autenticação e Autorização
+	São recursos utilizados para segurança de nossa aplicação tendo como objetivo controlar/restringir informações/dados.
+	- Autenticaçao: Refere-se ao processo de validação. Ex: Verificar a identidade de um usuário pela comparação de credencias apresentadas com outras pré-definidas.
+	- Autorização: Refere-se ao processo de validar as permissões que um determinado usuário poderá fazer após autenticado.
+	- No ASP.NET Core, existe o recurso nativo que é o Identity para realização de autenticação e autorização. 
+	- Provedores externos (Google, Facebook, etcs).
+	- Autenticação no servidor com: Identity Server, OpenId, Azure Active Directory, etcs.
+	- Esquemas de autenticação:
+		- Anônimo: Uma requisição anônima não contém informações de autenticação.
+		- Basic: A autenticação básica envia uma cadeia de caracteres codificadas em base64 contendo nome de usuário e senha para o cliente com conexão SSL/HTTPS.
+		- Tokens(Bearer) - É um esquema de autenticação HTTP que envolve tokens de segurança, chamado: "tokens de portador"(bearer token), onde pode ser entendido como "dar acesso ao portador do token". O mesmo é uma string cifrada geralmente gerada pelo servidor em resposta de uma requisição de login.
+
+
 	
