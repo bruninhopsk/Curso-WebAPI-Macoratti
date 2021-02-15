@@ -1,10 +1,11 @@
 using Domain;
 using Infrastructure.EntityFramework.Mappings;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityFramework.Context
 {
-    public class AppDataContext : DbContext
+    public class AppDataContext : IdentityDbContext
     {
         public DbSet<Product> Product { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -14,6 +15,7 @@ namespace Infrastructure.EntityFramework.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CategoryMap).Assembly);
         }
     }
