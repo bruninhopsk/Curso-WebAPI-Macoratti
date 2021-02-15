@@ -86,5 +86,25 @@
 		- Basic: A autenticação básica envia uma cadeia de caracteres codificadas em base64 contendo nome de usuário e senha para o cliente com conexão SSL/HTTPS.
 		- Tokens(Bearer) - É um esquema de autenticação HTTP que envolve tokens de segurança, chamado: "tokens de portador"(bearer token), onde pode ser entendido como "dar acesso ao portador do token". O mesmo é uma string cifrada geralmente gerada pelo servidor em resposta de uma requisição de login.
 
-
+# JWT (Json Web Token)
+	Padrão que define uma forma segura de transmitir informações entre duas partes. A transmissão pode ser feita via URL, POST ou em cabeçalho HTTP e a informação é assinada digitalmente por um algoritmo ou par de chaves publica/privada usando RSA(sistema de criptografia de chave publica).
+	São usados assim tokens criptografados para permitir o acesso aos recursos de uma WEBAPI (essa abordagem é conhecida como Bearer Authentication)
+	- Token JWT é formado por 3 partes: header.payload.signature
+	 	- Header: Contém o tipo de token(JWT) e a criptografia usada (HMAC ou RSA)
+	 	- Payload: Contém os "pedidos", são usados declarações ou claims associadas ao usuário do token.
+		- Signature: Assinatura usada na validação do token usando um "chave secreta" onde é anexada ao final do token que pode ser usado (por quem tiver a chave secreta) para verificar se o emissor do JWT é quem ele afirma ser e se o token é valido(claims). OBS: Para gerar a assinatura usamos o Header o Payload codificando-os e a seguir assinamos usando o algoritmo definido.
+		Exemplo Token JWT: EYEWfdfd121.dsdsWDSDSD12.EfdsfeYDS121 
+		HEADER{"alg": "HSASA", "typ": "JWT} PAYLOAD{"sub": "1234", "name": "Bruno", "iat": 123421} VERIFY SIGNATURE(base64UrlEncode(header)+ ...)
+	- Etapas do processo de autenticação via token JWT
+		1.Controlador: Gerar Token
+		 	- Verifica as credencias
+			- Definir claims do usuário (nome, email, etcs)
+			- Definir a chave secreta e algoritmo de encriptação usados.
+			- Gerar token com base no emissor, audiência, claims e definir a data de expiração
+		2.Startup: Validar o token
+			- Validar emissor
+			- Validar audiência
+			- Validar assinatura com chave secreta
+	
+	 
 	
